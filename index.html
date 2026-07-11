@@ -367,6 +367,7 @@
   ];
 
   var TERMS = [
+    { id:'t4-26', t:'T4 2026', s:'2026年8–12月', o:0 },
     { id:'t1-27', t:'T1 2027', s:'2027年1–3月', o:1 },
     { id:'t2-27', t:'T2 2027', s:'2027年4–7月', o:2 },
     { id:'t3-27', t:'T3 2027', s:'2027年7–10月', o:3 },
@@ -380,26 +381,30 @@
 
   // Which terms each course is offered in (from official annual timetable, T1 2027–T4 2028)
   var OFFER = {
-    ES:   ['t1-27','t2-27','t3-27','t4-27','t1-28','t2-28','t3-28','t4-28'],
-    RTA:  ['t1-27','t3-27','t4-27','t1-28','t3-28','t4-28'],
-    TAX:  ['t2-27','t4-27','t2-28','t4-28'],
+    ES:   ['t4-26','t1-27','t2-27','t3-27','t4-27','t1-28','t2-28','t3-28','t4-28'],
+    RTA:  ['t4-26','t1-27','t3-27','t4-27','t1-28','t3-28','t4-28'],
+    TAX:  ['t4-26','t2-27','t4-27','t2-28','t4-28'],
     FAR:  ['t1-27','t2-27','t3-27','t1-28','t2-28','t3-28'],
     SBP:  ['t2-27','t3-27','t1-28','t3-28'],
-    AA:   ['t1-27','t4-27','t2-28','t4-28'],
-    ICAP: ['t2-27','t3-27','t4-27','t2-28','t3-28','t4-28']
+    AA:   ['t4-26','t1-27','t4-27','t2-28','t4-28'],
+    ICAP: ['t4-26','t2-27','t3-27','t4-27','t2-28','t3-28','t4-28']
   };
 
   // Key dates per course per offered term: [commence, final assessment, results, (gradShort)]
   // Only the four courses with confirmed per-term dates are filled; others show offering terms only.
   var DATES = {
+    ES:  { 't4-26':['31 Aug 26','12 Sep 26','25 Sep 26'] },
+    RTA: { 't4-26':['14 Sep 26','11 Nov 26','27 Nov 26'] },
+    TAX: { 't4-26':['19 Oct 26','25 Nov 26','17 Dec 26'] },
     FAR: { 't1-27':['11 Jan 27','9 Mar 27','2 Apr 27'], 't2-27':['30 Mar 27','25 May 27','18 Jun 27'],
            't3-27':['8 Jun 27','3 Aug 27','27 Aug 27'], 't1-28':['10 Jan 28','7 Mar 28','24 Mar 28'],
            't2-28':['27 Mar 28','23 May 28','16 Jun 28'], 't3-28':['6 Jun 28','1 Aug 28','25 Aug 28'] },
     SBP: { 't2-27':['19 Apr 27','15 Jun 27','16 Jul 27'], 't3-27':['19 Jul 27','14 Sep 27','8 Oct 27'],
            't1-28':['24 Jan 28','21 Mar 28','13 Apr 28'], 't3-28':['10 Jul 28','5 Sep 28','29 Sep 28'] },
-    AA:  { 't1-27':['18 Jan 27','16 Mar 27','16 Apr 27'], 't4-27':['13 Sep 27','9 Nov 27','3 Dec 27'],
+    AA:  { 't4-26':['14 Sep 26','10 Nov 26','4 Dec 26'], 't1-27':['18 Jan 27','16 Mar 27','16 Apr 27'], 't4-27':['13 Sep 27','9 Nov 27','3 Dec 27'],
            't2-28':['18 Apr 28','13 Jun 28','7 Jul 28'], 't4-28':['11 Sep 28','7 Nov 28','1 Dec 28'] },
-    ICAP:{ 't2-27':['3 May 27','29 Jun 27','23 Jul 27','2027 · 7月'], 't3-27':['26 Jul 27','21 Sep 27','15 Oct 27','2027 · 10月'],
+    ICAP:{ 't4-26':['12 Oct 26','8 Dec 26','29 Jan 27','2027 · 1月'],
+           't2-27':['3 May 27','29 Jun 27','23 Jul 27','2027 · 7月'], 't3-27':['26 Jul 27','21 Sep 27','15 Oct 27','2027 · 10月'],
            't4-27':['1 Nov 27','14 Dec 27','28 Jan 28','2028 · 1月'], 't2-28':['1 May 28','27 Jun 28','21 Jul 28','2028 · 7月'],
            't3-28':['24 Jul 28','19 Sep 28','13 Oct 28','2028 · 10月'], 't4-28':['16 Oct 28','12 Dec 28','25 Jan 29','2029 · 1月'] }
   };
@@ -559,7 +564,7 @@
       gv.className = 'val done'; gv.textContent = '🎓 已完成'; gv.title = 'ICAP 已标记为完成';
     } else if (status.ICAP === 'doing'){
       gv.className = 'val pending'; gv.textContent = 'ICAP 进行中'; gv.title = '';
-    } else if (todoN>0 && placedN===todoN && conflictN===0 && placements.ICAP){
+    } else if (todoN>0 && placedN===todoN && conflictN===0 && placements.ICAP && DATES.ICAP[placements.ICAP]){
       var g = DATES.ICAP[placements.ICAP];
       gv.className = 'val done'; gv.textContent = '🎓 ' + (g[3]||g[2]); gv.title = 'ICAP 成绩发布：'+g[2];
     } else if (conflictN>0){
