@@ -1,0 +1,637 @@
+<title>CA 学习规划台 — GradDipCA (NZ)</title>
+<style>
+  :root {
+    --paper: #e8ecea;
+    --board: #dfe4e2;
+    --surface: #ffffff;
+    --surface-2: #f4f7f6;
+    --ink: #15201e;
+    --ink-soft: #3f4f4c;
+    --muted: #6c7c78;
+    --faint: #9aa8a4;
+    --hair: #d3dbd8;
+    --hair-2: #c2ccc8;
+    --teal: #0d7c86;
+    --teal-2: #0a626b;
+    --teal-soft: #d5e9eb;
+    --ok: #2f8a5f;
+    --ok-soft: #d6ecdf;
+    --warn: #b3720b;
+    --warn-soft: #f5e7cb;
+    --bad: #c04a2f;
+    --bad-soft: #f6ddd4;
+    --gold: #a9822a;
+    --gold-soft: #f1e6cd;
+    --shadow-1: 0 1px 2px rgba(20,32,30,.06), 0 4px 12px -6px rgba(20,32,30,.14);
+    --shadow-2: 0 8px 20px -6px rgba(20,32,30,.24), 0 2px 6px rgba(20,32,30,.10);
+    --shadow-drag: 0 18px 40px -10px rgba(20,32,30,.45), 0 4px 10px rgba(20,32,30,.2);
+    --serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --sans: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    --mono: "Cascadia Code", ui-monospace, Consolas, "SF Mono", monospace;
+    --r: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0c1412; --board: #0f1815; --surface: #16221f; --surface-2: #1b2823;
+      --ink: #e9efed; --ink-soft: #b6c3bf; --muted: #85938f; --faint: #5c6b67;
+      --hair: #253430; --hair-2: #32443e;
+      --teal: #34b0c0; --teal-2: #4cc3d2; --teal-soft: #103135;
+      --ok: #47bb85; --ok-soft: #112a1f; --warn: #dfa341; --warn-soft: #2c2410;
+      --bad: #e0705a; --bad-soft: #2f180f; --gold: #d0aa5a; --gold-soft: #2a2110;
+      --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 6px 16px -8px rgba(0,0,0,.6);
+      --shadow-2: 0 10px 26px -8px rgba(0,0,0,.7), 0 2px 6px rgba(0,0,0,.4);
+      --shadow-drag: 0 22px 46px -10px rgba(0,0,0,.8), 0 4px 12px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="light"]{ --paper:#e8ecea; --board:#dfe4e2; --surface:#fff; --surface-2:#f4f7f6; --ink:#15201e; --ink-soft:#3f4f4c; --muted:#6c7c78; --faint:#9aa8a4; --hair:#d3dbd8; --hair-2:#c2ccc8; --teal:#0d7c86; --teal-2:#0a626b; --teal-soft:#d5e9eb; --ok:#2f8a5f; --ok-soft:#d6ecdf; --warn:#b3720b; --warn-soft:#f5e7cb; --bad:#c04a2f; --bad-soft:#f6ddd4; --gold:#a9822a; --gold-soft:#f1e6cd; --shadow-1:0 1px 2px rgba(20,32,30,.06),0 4px 12px -6px rgba(20,32,30,.14); --shadow-2:0 8px 20px -6px rgba(20,32,30,.24),0 2px 6px rgba(20,32,30,.10); --shadow-drag:0 18px 40px -10px rgba(20,32,30,.45),0 4px 10px rgba(20,32,30,.2); }
+  :root[data-theme="dark"]{ --paper:#0c1412; --board:#0f1815; --surface:#16221f; --surface-2:#1b2823; --ink:#e9efed; --ink-soft:#b6c3bf; --muted:#85938f; --faint:#5c6b67; --hair:#253430; --hair-2:#32443e; --teal:#34b0c0; --teal-2:#4cc3d2; --teal-soft:#103135; --ok:#47bb85; --ok-soft:#112a1f; --warn:#dfa341; --warn-soft:#2c2410; --bad:#e0705a; --bad-soft:#2f180f; --gold:#d0aa5a; --gold-soft:#2a2110; --shadow-1:0 1px 2px rgba(0,0,0,.4),0 6px 16px -8px rgba(0,0,0,.6); --shadow-2:0 10px 26px -8px rgba(0,0,0,.7),0 2px 6px rgba(0,0,0,.4); --shadow-drag:0 22px 46px -10px rgba(0,0,0,.8),0 4px 12px rgba(0,0,0,.6); }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: var(--sans); line-height: 1.45;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .app { max-width: 1180px; margin: 0 auto; padding: clamp(14px,3vw,26px) clamp(12px,3vw,26px) 60px; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 18px;
+    flex-wrap: wrap; margin-bottom: 6px;
+  }
+  .brand h1 { font-family: var(--serif); font-size: clamp(1.3rem,3vw,1.7rem); margin: 0; letter-spacing: -.01em; font-weight: 700; }
+  .brand p { margin: 2px 0 0; color: var(--muted); font-size: .8rem; font-family: var(--mono); }
+  .grad {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--hair); border-radius: 14px;
+    padding: 10px 16px; box-shadow: var(--shadow-1); min-width: 220px;
+  }
+  .grad .lbl { font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .grad .val { font-family: var(--serif); font-size: 1.5rem; line-height: 1; font-variant-numeric: tabular-nums; margin-top: 3px; transition: color .3s; }
+  .grad .val.done { color: var(--gold); }
+  .grad .val.pending { color: var(--faint); font-size: 1rem; font-family: var(--sans); }
+  .grad .divider { width: 1px; align-self: stretch; background: var(--hair); }
+  .grad .stat { text-align: center; }
+  .grad .stat b { font-family: var(--serif); font-size: 1.35rem; font-variant-numeric: tabular-nums; display: block; }
+  .grad .stat.bad b { color: var(--bad); }
+  .grad .stat.ok b { color: var(--ok); }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0 14px; }
+  .hint { color: var(--muted); font-size: .82rem; margin-right: auto; display: flex; align-items: center; gap: 7px; }
+  .hint kbd { font-family: var(--mono); font-size: .72rem; background: var(--surface-2); border: 1px solid var(--hair); border-radius: 5px; padding: 1px 6px; }
+  button.btn {
+    font-family: var(--sans); font-size: .82rem; font-weight: 600; cursor: pointer;
+    border-radius: 9px; padding: 8px 14px; border: 1px solid var(--hair-2);
+    background: var(--surface); color: var(--ink); box-shadow: var(--shadow-1);
+    transition: transform .12s, background .18s, border-color .18s;
+  }
+  button.btn:hover { border-color: var(--teal); color: var(--teal); }
+  button.btn:active { transform: translateY(1px); }
+  button.btn.primary { background: var(--teal); color: #fff; border-color: var(--teal); }
+  button.btn.primary:hover { background: var(--teal-2); color: #fff; }
+  button.btn.ghost { background: transparent; box-shadow: none; }
+  button.btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  /* ---------- Completed strip ---------- */
+  .done-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .done-row .cap { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-right: 4px; }
+  .done-pill { display: inline-flex; align-items: center; gap: 6px; font-size: .8rem; font-weight: 600;
+    background: var(--ok-soft); color: var(--ok); border-radius: 999px; padding: 4px 11px 4px 8px; }
+  .done-pill.cur { background: var(--warn-soft); color: var(--warn); }
+  .done-pill svg { width: 13px; height: 13px; }
+  .done-pill small { color: var(--ink-soft); font-weight: 500; }
+
+  /* ---------- Tray ---------- */
+  .tray {
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px dashed var(--hair-2); border-radius: 14px;
+    padding: 12px 14px; margin-bottom: 16px; min-height: 74px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    transition: border-color .18s, background .18s;
+  }
+  .tray.tray-target { border-color: var(--teal); border-style: solid; background: var(--teal-soft); }
+  .tray .tray-lbl { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .tray .empty { color: var(--faint); font-size: .85rem; font-style: italic; }
+
+  /* ---------- Course card ---------- */
+  .course {
+    position: relative; touch-action: none; user-select: none; cursor: grab;
+    background: var(--surface); border: 1px solid var(--hair-2);
+    border-left: 4px solid var(--c, var(--teal)); border-radius: 10px;
+    padding: 9px 12px 9px 12px; box-shadow: var(--shadow-1); width: 156px;
+    transition: transform .14s, box-shadow .18s, border-color .18s, opacity .18s;
+  }
+  .course:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); }
+  .course:active { cursor: grabbing; }
+  .course.dragging-src { opacity: .32; }
+  .course.pop { animation: pop .32s cubic-bezier(.2,1.3,.4,1); }
+  @keyframes pop { 0%{transform:scale(.82);opacity:.3} 100%{transform:scale(1);opacity:1} }
+  .course .code { font-family: var(--mono); font-weight: 700; font-size: .82rem; color: var(--c, var(--teal)); }
+  .course .nm { font-size: .82rem; font-weight: 600; margin-top: 1px; line-height: 1.2; }
+  .course .cn { font-size: .72rem; color: var(--muted); margin-top: 1px; }
+  .course .when { font-family: var(--mono); font-size: .68rem; color: var(--ink-soft); margin-top: 6px; display: none; }
+  .course.placed .when { display: block; }
+  .course .flag {
+    position: absolute; top: -8px; right: -6px; background: var(--bad); color: #fff;
+    font-size: .62rem; font-weight: 700; border-radius: 999px; width: 18px; height: 18px;
+    display: none; align-items: center; justify-content: center; box-shadow: var(--shadow-1);
+  }
+  .course.err { border-color: var(--bad); border-left-color: var(--bad); }
+  .course.err .flag { display: flex; }
+  .course.capstone { border-width: 1px; border-left-width: 4px; background: linear-gradient(180deg, var(--gold-soft), var(--surface)); }
+  .course .grip { position: absolute; top: 8px; right: 9px; color: var(--faint); font-size: .7rem; letter-spacing: 1px; }
+
+  .drag-ghost {
+    position: fixed; z-index: 9999; pointer-events: none; width: 156px;
+    box-shadow: var(--shadow-drag); transform: rotate(-3deg) scale(1.04); opacity: .97;
+    left: 0; top: 0;
+  }
+
+  /* ---------- Board ---------- */
+  .board-scroll { overflow-x: auto; padding: 4px 2px 14px; margin: 0 -2px; }
+  .board { display: grid; grid-auto-flow: column; grid-auto-columns: 178px; gap: 12px; min-width: min-content; }
+  .term {
+    background: var(--board); border: 1px solid var(--hair); border-radius: var(--r);
+    display: flex; flex-direction: column; transition: background .16s, border-color .16s, box-shadow .16s;
+  }
+  .term-head { padding: 10px 12px 8px; border-bottom: 1px solid var(--hair); }
+  .term-head .t { font-family: var(--mono); font-weight: 700; font-size: .84rem; letter-spacing: .02em; }
+  .term-head .s { font-size: .68rem; color: var(--muted); margin-top: 1px; }
+  .term-head .cnt { float: right; font-family: var(--mono); font-size: .68rem; color: var(--faint); font-weight: 700; }
+  .term-body { padding: 10px; display: flex; flex-direction: column; gap: 9px; min-height: 150px; flex: 1; }
+  .term-body .course { width: 100%; }
+  .slot { border: 1.5px dashed var(--hair-2); border-radius: 9px; min-height: 40px; flex: 1;
+    display: flex; align-items: center; justify-content: center; color: var(--faint); font-size: .72rem;
+    transition: border-color .15s, background .15s; }
+  .term.can .slot { border-color: var(--ok); }
+  .term.can { border-color: var(--ok); box-shadow: 0 0 0 2px var(--ok-soft); background: color-mix(in srgb, var(--ok-soft) 55%, var(--board)); }
+  .term.cannot { opacity: .82; }
+  .term.cannot .reason { color: var(--bad); }
+  .term.hoverdrop.can { box-shadow: 0 0 0 3px var(--ok); }
+  .term.hoverdrop.cannot { box-shadow: 0 0 0 3px var(--bad); background: color-mix(in srgb, var(--bad-soft) 45%, var(--board)); }
+  .term .reason { display: none; font-size: .68rem; text-align: center; padding: 6px; color: var(--muted); }
+  body.is-dragging .term.cannot .reason { display: block; }
+  body.is-dragging .term.cannot .slot { display: none; }
+  body.is-dragging .term.full-note .reason { display: block; }
+
+  /* ---------- Drawer ---------- */
+  .scrim { position: fixed; inset: 0; background: rgba(10,18,16,.42); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 50; }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; height: 100%; width: min(400px, 92vw);
+    background: var(--surface); box-shadow: var(--shadow-drag); z-index: 60;
+    transform: translateX(100%); transition: transform .3s cubic-bezier(.3,.8,.3,1);
+    display: flex; flex-direction: column; border-left: 1px solid var(--hair);
+  }
+  .drawer.open { transform: translateX(0); }
+  @media (prefers-reduced-motion: reduce){ .drawer, .scrim { transition: none; } .course.pop { animation: none; } }
+  .drawer-head { padding: 20px 22px 16px; border-bottom: 1px solid var(--hair); position: relative; }
+  .drawer-head .code { font-family: var(--mono); font-weight: 700; font-size: .84rem; color: var(--c,var(--teal)); }
+  .drawer-head h2 { font-family: var(--serif); font-size: 1.4rem; margin: 4px 0 2px; line-height: 1.15; }
+  .drawer-head .cn { color: var(--muted); font-size: .88rem; }
+  .drawer-close { position: absolute; top: 16px; right: 16px; background: var(--surface-2); border: 1px solid var(--hair);
+    border-radius: 8px; width: 32px; height: 32px; cursor: pointer; color: var(--ink-soft); font-size: 1.1rem; line-height: 1; }
+  .drawer-close:hover { color: var(--bad); border-color: var(--bad); }
+  .drawer-body { padding: 18px 22px 30px; overflow-y: auto; }
+  .d-sec { margin-bottom: 20px; }
+  .d-sec > h3 { font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin: 0 0 9px; }
+  .d-desc { font-size: .9rem; color: var(--ink-soft); }
+  .d-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .d-chip { font-size: .74rem; background: var(--surface-2); border: 1px solid var(--hair); border-radius: 7px; padding: 5px 10px; font-family: var(--mono); }
+  .prq { display: flex; flex-direction: column; gap: 6px; }
+  .prq .row { display: flex; align-items: center; gap: 8px; font-size: .84rem; }
+  .prq .dot { width: 16px; height: 16px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; font-size: .66rem; color: #fff; font-weight: 700; }
+  .prq .dot.ok { background: var(--ok); }
+  .prq .dot.no { background: var(--bad); }
+  .offer-terms { display: flex; flex-wrap: wrap; gap: 6px; }
+  .offer-terms .ot { font-family: var(--mono); font-size: .74rem; padding: 4px 9px; border-radius: 7px; background: var(--teal-soft); color: var(--teal); font-weight: 600; }
+  .offer-terms .ot.here { outline: 2px solid var(--teal); }
+  .d-dates { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-family: var(--mono); font-size: .82rem; }
+  .d-dates b { color: var(--muted); font-weight: 600; }
+  .d-status { padding: 10px 12px; border-radius: 9px; font-size: .82rem; font-weight: 600; }
+  .d-status.placed { background: var(--ok-soft); color: var(--ok); }
+  .d-status.err { background: var(--bad-soft); color: var(--bad); }
+  .d-status.un { background: var(--surface-2); color: var(--muted); }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px);
+    background: var(--ink); color: var(--paper); padding: 11px 18px; border-radius: 10px;
+    font-size: .85rem; font-weight: 500; box-shadow: var(--shadow-2); z-index: 90;
+    opacity: 0; pointer-events: none; transition: opacity .22s, transform .22s; max-width: 90vw;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast .ic { font-size: 1rem; }
+
+  .foot { margin-top: 26px; font-size: .76rem; color: var(--faint); line-height: 1.7; border-top: 1px solid var(--hair); padding-top: 16px; }
+  .foot code { font-family: var(--mono); background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+</style>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <h1>CA 学习规划台</h1>
+      <p>GradDipCA · 新西兰 · 拖拽排课</p>
+    </div>
+    <div class="grad">
+      <div>
+        <div class="lbl">预计毕业</div>
+        <div class="val pending" id="gradVal">— 排入全部课程 —</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat" id="placedStat"><b>0/4</b><span class="lbl">已排</span></div>
+      <div class="divider"></div>
+      <div class="stat ok" id="conflictStat"><b>0</b><span class="lbl">冲突</span></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="hint">💡 拖动课程卡到学期列，<kbd>点击</kbd>卡片看详情，拖回上方托盘可取消</span>
+    <button class="btn primary" id="presetCompact">⚡ 紧凑排布</button>
+    <button class="btn" id="presetSafe">🛡 稳健排布</button>
+    <button class="btn ghost" id="resetBtn">清空</button>
+  </div>
+
+  <div class="done-row">
+    <span class="cap">已完成</span>
+    <span class="done-pill"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg>ES <small>伦理</small></span>
+    <span class="done-pill"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg>RTA <small>风险·AI</small></span>
+    <span class="done-pill"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg>DAI <small>数据分析</small></span>
+    <span class="done-pill cur">◐ TAX NZ <small>T4 2026 进行中</small></span>
+  </div>
+
+  <div class="tray" id="tray" data-drop="tray">
+    <span class="tray-lbl">待排课程</span>
+  </div>
+
+  <div class="board-scroll">
+    <div class="board" id="board"></div>
+  </div>
+
+  <p class="foot" id="foot">
+    拖动上方课程卡到学期列即可排课。系统会实时校验：该学期是否开课、是否已满 2 门、先修课是否排在更早学期。<br>
+    数据来源：CA Program 年度时间表（T1 2026–T4 2028）。日期官方标注「可能变动」，以 <code>My Capability Learn</code> 公告为准。
+  </p>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+<div class="toast" id="toast"><span class="ic"></span><span class="msg"></span></div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ----- Data -----
+  var COMPLETED = ['ES','RTA','TAX','DAI']; // prereqs auto-satisfied
+
+  var COURSES = {
+    FAR:  { code:'FAR',  nm:'Financial Accounting & Reporting', cn:'财务会计与报告', cp:15, c:'#0d7c86',
+            prereq:['ES'], desc:'财务报表编制、会计准则应用与合并报表等核心技术，是 AA（审计）的前置科目。' },
+    SBP:  { code:'SBP',  nm:'Strategy & Business Performance', cn:'战略与业务表现', cp:15, c:'#3f7dbd',
+            prereq:['ES','RTA'], desc:'战略分析、绩效管理与商业决策。先修已全部满足，是最灵活可安排的一门。' },
+    AA:   { code:'AA',   nm:'Audit & Analytics', cn:'审计与分析', cp:15, c:'#8a5fb0',
+            prereq:['ES','FAR'], desc:'审计流程、证据获取与数据分析在鉴证中的应用。需先修完 FAR，且仅在部分学期开课。' },
+    ICAP: { code:'ICAP', nm:'Integrated CA Practice', cn:'综合执业（毕业顶点课）', cp:15, c:'#a9822a', capstone:true,
+            prereq:['ES','RTA','TAX','FAR','SBP','AA'], desc:'整合全部核心知识的综合案例与监考大考。必须最后修，需完成其余 6 门核心课。' }
+  };
+
+  var TERMS = [
+    { id:'t1-27', t:'T1 2027', s:'2027年1–3月', o:1 },
+    { id:'t2-27', t:'T2 2027', s:'2027年4–7月', o:2 },
+    { id:'t3-27', t:'T3 2027', s:'2027年7–10月', o:3 },
+    { id:'t4-27', t:'T4 2027', s:'2027年9–12月', o:4 },
+    { id:'t1-28', t:'T1 2028', s:'2028年1–3月', o:5 },
+    { id:'t2-28', t:'T2 2028', s:'2028年4–7月', o:6 },
+    { id:'t3-28', t:'T3 2028', s:'2028年7–10月', o:7 },
+    { id:'t4-28', t:'T4 2028', s:'2028年9–12月', o:8 }
+  ];
+  var TORDER = {}; TERMS.forEach(function(t){ TORDER[t.id]=t.o; });
+
+  // Which terms each course is offered in (from official timetable)
+  var OFFER = {
+    FAR:  ['t1-27','t2-27','t3-27','t1-28','t2-28','t3-28'],
+    SBP:  ['t2-27','t3-27','t1-28','t3-28'],
+    AA:   ['t1-27','t4-27','t2-28','t4-28'],
+    ICAP: ['t2-27','t3-27','t4-27','t2-28','t3-28','t4-28']
+  };
+
+  // Key dates per course per offered term: [commence, final assessment, results, gradShort]
+  var DATES = {
+    FAR: { 't1-27':['11 Jan 27','9 Mar 27','2 Apr 27'], 't2-27':['30 Mar 27','25 May 27','18 Jun 27'],
+           't3-27':['8 Jun 27','3 Aug 27','27 Aug 27'], 't1-28':['10 Jan 28','7 Mar 28','24 Mar 28'],
+           't2-28':['27 Mar 28','23 May 28','16 Jun 28'], 't3-28':['6 Jun 28','1 Aug 28','25 Aug 28'] },
+    SBP: { 't2-27':['19 Apr 27','15 Jun 27','16 Jul 27'], 't3-27':['19 Jul 27','14 Sep 27','8 Oct 27'],
+           't1-28':['24 Jan 28','21 Mar 28','13 Apr 28'], 't3-28':['10 Jul 28','5 Sep 28','29 Sep 28'] },
+    AA:  { 't1-27':['18 Jan 27','16 Mar 27','16 Apr 27'], 't4-27':['13 Sep 27','9 Nov 27','3 Dec 27'],
+           't2-28':['18 Apr 28','13 Jun 28','7 Jul 28'], 't4-28':['11 Sep 28','7 Nov 28','1 Dec 28'] },
+    ICAP:{ 't2-27':['3 May 27','29 Jun 27','23 Jul 27','2027 · 7月'], 't3-27':['26 Jul 27','21 Sep 27','15 Oct 27','2027 · 10月'],
+           't4-27':['1 Nov 27','14 Dec 27','28 Jan 28','2028 · 1月'], 't2-28':['1 May 28','27 Jun 28','21 Jul 28','2028 · 7月'],
+           't3-28':['24 Jul 28','19 Sep 28','13 Oct 28','2028 · 10月'], 't4-28':['16 Oct 28','12 Dec 28','25 Jan 29','2029 · 1月'] }
+  };
+
+  var CN = { ES:'伦理与可持续', RTA:'风险·科技·AI', TAX:'税务 NZ', DAI:'数据分析', FAR:'财务会计与报告', SBP:'战略与业务表现', AA:'审计与分析', ICAP:'综合执业' };
+
+  // ----- State -----
+  var placements = { FAR:null, SBP:null, AA:null, ICAP:null };
+  var IDS = ['FAR','SBP','AA','ICAP'];
+
+  var boardEl = document.getElementById('board');
+  var trayEl  = document.getElementById('tray');
+
+  // ----- Build board columns once -----
+  TERMS.forEach(function(t){
+    var col = document.createElement('div');
+    col.className = 'term'; col.dataset.term = t.id; col.dataset.drop = t.id;
+    col.innerHTML =
+      '<div class="term-head"><span class="cnt">0/2</span><div class="t">'+t.t+'</div><div class="s">'+t.s+'</div></div>'+
+      '<div class="term-body"><div class="reason"></div></div>';
+    boardEl.appendChild(col);
+  });
+
+  // ----- Course card factory -----
+  function makeCard(id, placed){
+    var d = COURSES[id];
+    var el = document.createElement('div');
+    el.className = 'course' + (placed?' placed':'') + (d.capstone?' capstone':'');
+    el.dataset.course = id;
+    el.style.setProperty('--c', d.c);
+    var when = '';
+    if (placed && DATES[id][placements[id]]) {
+      var dt = DATES[id][placements[id]];
+      when = '<div class="when">开课 '+dt[0]+' · 成绩 '+dt[2]+'</div>';
+    }
+    el.innerHTML =
+      '<span class="grip">⠿</span>'+
+      '<div class="flag">!</div>'+
+      '<div class="code">'+d.code+'</div>'+
+      '<div class="nm">'+d.nm+'</div>'+
+      '<div class="cn">'+d.cn+'</div>'+ when;
+    return el;
+  }
+
+  // ----- Validation -----
+  function errorsMap(){
+    var errs = {};
+    IDS.forEach(function(id){
+      var term = placements[id]; if(!term) return;
+      if (OFFER[id].indexOf(term) < 0){ errs[id] = '本学期未开课'; return; }
+      var pr = COURSES[id].prereq;
+      for (var i=0;i<pr.length;i++){
+        var p = pr[i];
+        if (COMPLETED.indexOf(p) >= 0) continue;        // already completed
+        if (!placements[p]) { errs[id] = '需先修 '+p+'（尚未排入）'; return; }
+        if (TORDER[placements[p]] >= TORDER[term]) { errs[id] = '需先修 '+p+'（须排在更早学期）'; return; }
+      }
+    });
+    return errs;
+  }
+
+  // ----- Render -----
+  function render(popId){
+    var errs = errorsMap();
+
+    // tray
+    trayEl.querySelectorAll('.course').forEach(function(n){ n.remove(); });
+    var un = IDS.filter(function(id){ return !placements[id]; });
+    var emptyMsg = trayEl.querySelector('.empty');
+    if (emptyMsg) emptyMsg.remove();
+    if (un.length === 0){
+      var e = document.createElement('span'); e.className='empty'; e.textContent='全部课程已排入 ✓'; trayEl.appendChild(e);
+    } else {
+      un.forEach(function(id){ trayEl.appendChild(makeCard(id,false)); });
+    }
+
+    // columns
+    TERMS.forEach(function(t){
+      var col = boardEl.querySelector('[data-term="'+t.id+'"]');
+      var body = col.querySelector('.term-body');
+      body.querySelectorAll('.course, .slot').forEach(function(n){ n.remove(); });
+      var here = IDS.filter(function(id){ return placements[id]===t.id; });
+      here.forEach(function(id){
+        var card = makeCard(id,true);
+        if (errs[id]) card.classList.add('err');
+        if (id===popId) card.classList.add('pop');
+        body.appendChild(card);
+      });
+      for (var k=here.length; k<2; k++){
+        var slot = document.createElement('div'); slot.className='slot'; slot.textContent='＋';
+        body.appendChild(slot);
+      }
+      col.querySelector('.cnt').textContent = here.length + '/2';
+    });
+
+    // status
+    var placedN = IDS.filter(function(id){ return placements[id]; }).length;
+    var conflictN = Object.keys(errs).length;
+    document.querySelector('#placedStat b').textContent = placedN + '/4';
+    var cs = document.getElementById('conflictStat');
+    cs.querySelector('b').textContent = conflictN;
+    cs.className = 'stat ' + (conflictN? 'bad':'ok');
+
+    var gv = document.getElementById('gradVal');
+    if (placedN===4 && conflictN===0){
+      var g = DATES.ICAP[placements.ICAP];
+      gv.className = 'val done'; gv.textContent = '🎓 ' + (g[3]||g[2]);
+      gv.title = 'ICAP 成绩发布：'+g[2];
+    } else if (conflictN>0){
+      gv.className = 'val pending'; gv.textContent = '⚠ 有 '+conflictN+' 处冲突待解决';
+    } else {
+      gv.className = 'val pending'; gv.textContent = '— 还差 '+(4-placedN)+' 门未排 —';
+    }
+  }
+
+  // ----- Placement ops -----
+  function placeCourse(id, term){
+    placements[id] = term;
+    render(id);
+  }
+  function unplace(id){ placements[id]=null; render(); }
+
+  // ----- Drag engine (pointer based) -----
+  var drag = null; // {id, ghost, startX, startY, started, fromTerm}
+  var THRESH = 5;
+
+  document.addEventListener('pointerdown', function(ev){
+    if (ev.button !== undefined && ev.button !== 0) return;
+    var card = ev.target.closest('.course');
+    if (!card) return;
+    drag = { id: card.dataset.course, startX: ev.clientX, startY: ev.clientY,
+             started:false, src:card, fromTerm: placements[card.dataset.course] };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  });
+
+  function beginDrag(ev){
+    drag.started = true;
+    document.body.classList.add('is-dragging');
+    drag.src.classList.add('dragging-src');
+    var g = drag.src.cloneNode(true);
+    g.classList.add('drag-ghost'); g.classList.remove('dragging-src','pop');
+    document.body.appendChild(g);
+    drag.ghost = g;
+    // mark valid/invalid columns for this course
+    TERMS.forEach(function(t){
+      var col = boardEl.querySelector('[data-term="'+t.id+'"]');
+      col.classList.remove('can','cannot','full-note');
+      var offered = OFFER[drag.id].indexOf(t.id) >= 0;
+      var count = IDS.filter(function(x){ return placements[x]===t.id && x!==drag.id; }).length;
+      var reasonEl = col.querySelector('.reason');
+      if (!offered){ col.classList.add('cannot'); reasonEl.textContent='本学期未开课'; }
+      else if (count>=2){ col.classList.add('cannot'); reasonEl.textContent='已满 2 门'; }
+      else { col.classList.add('can'); reasonEl.textContent=''; }
+    });
+    moveGhost(ev);
+  }
+
+  function moveGhost(ev){
+    drag.ghost.style.left = (ev.clientX - 78) + 'px';
+    drag.ghost.style.top  = (ev.clientY - 26) + 'px';
+  }
+
+  function onMove(ev){
+    if (!drag) return;
+    if (!drag.started){
+      if (Math.abs(ev.clientX-drag.startX) > THRESH || Math.abs(ev.clientY-drag.startY) > THRESH) beginDrag(ev);
+      else return;
+    }
+    moveGhost(ev);
+    var el = document.elementFromPoint(ev.clientX, ev.clientY);
+    var zone = el && el.closest ? el.closest('[data-drop]') : null;
+    document.querySelectorAll('.hoverdrop').forEach(function(n){ n.classList.remove('hoverdrop'); });
+    trayEl.classList.remove('tray-target');
+    if (zone){
+      if (zone.dataset.drop === 'tray'){ trayEl.classList.add('tray-target'); }
+      else zone.classList.add('hoverdrop');
+    }
+  }
+
+  function onUp(ev){
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+    if (!drag) return;
+
+    if (!drag.started){ // treat as click -> open detail
+      openDrawer(drag.id);
+      cleanup(); return;
+    }
+
+    var el = document.elementFromPoint(ev.clientX, ev.clientY);
+    var zone = el && el.closest ? el.closest('[data-drop]') : null;
+    var id = drag.id;
+
+    if (zone){
+      var target = zone.dataset.drop;
+      if (target === 'tray'){
+        if (placements[id]) unplace(id);
+      } else {
+        var offered = OFFER[id].indexOf(target) >= 0;
+        var count = IDS.filter(function(x){ return placements[x]===target && x!==id; }).length;
+        if (!offered){ toast('✕','该学期不开设 '+id+'（'+CN[id]+'）'); }
+        else if (count>=2){ toast('✕','该学期已排满 2 门'); }
+        else {
+          placeCourse(id, target);
+          var e2 = errorsMap();
+          if (e2[id]) toast('⚠', e2[id]+' — 已排入但需调整顺序');
+          else toast('✓', id+' 已排入 '+termLabel(target));
+        }
+      }
+    }
+    cleanup();
+  }
+
+  function cleanup(){
+    if (drag && drag.ghost) drag.ghost.remove();
+    if (drag && drag.src) drag.src.classList.remove('dragging-src');
+    document.body.classList.remove('is-dragging');
+    document.querySelectorAll('.hoverdrop,.can,.cannot,.full-note').forEach(function(n){ n.classList.remove('hoverdrop','can','cannot','full-note'); });
+    trayEl.classList.remove('tray-target');
+    drag = null;
+  }
+
+  function termLabel(id){ for (var i=0;i<TERMS.length;i++) if(TERMS[i].id===id) return TERMS[i].t; return id; }
+
+  // ----- Drawer -----
+  var drawer = document.getElementById('drawer');
+  var scrim = document.getElementById('scrim');
+
+  function openDrawer(id){
+    var d = COURSES[id];
+    var placed = placements[id];
+    var errs = errorsMap();
+    var offeredHtml = OFFER[id].map(function(t){
+      return '<span class="ot'+(t===placed?' here':'')+'">'+termLabel(t)+'</span>';
+    }).join('');
+    var prqHtml = d.prereq.map(function(p){
+      var ok;
+      if (COMPLETED.indexOf(p)>=0) ok = true;
+      else if (placements[p] && placed && TORDER[placements[p]] < TORDER[placed]) ok = true;
+      else if (placements[p] && !placed) ok = true; // placed elsewhere, this not placed yet
+      else ok = false;
+      var label = (CN[p]||p);
+      var tag = COMPLETED.indexOf(p)>=0 ? '已完成' : (placements[p]? '已排 '+termLabel(placements[p]) : '待排');
+      return '<div class="row"><span class="dot '+(ok?'ok':'no')+'">'+(ok?'✓':'!')+'</span> <b style="font-family:var(--mono)">'+p+'</b> '+label+' <span style="color:var(--faint);margin-left:auto;font-size:.74rem">'+tag+'</span></div>';
+    }).join('');
+
+    var datesHtml = '';
+    if (placed && DATES[id][placed]){
+      var dt = DATES[id][placed];
+      datesHtml = '<div class="d-sec"><h3>本学期关键日期 · '+termLabel(placed)+'</h3><div class="d-dates">'+
+        '<b>开课</b><span>'+dt[0]+'</span><b>大作业/考试</b><span>'+dt[1]+'</span><b>成绩发布</b><span>'+dt[2]+'</span></div></div>';
+    }
+
+    var statusHtml;
+    if (!placed) statusHtml = '<div class="d-status un">尚未排入 — 从托盘拖到某个学期</div>';
+    else if (errs[id]) statusHtml = '<div class="d-status err">⚠ '+errs[id]+'</div>';
+    else statusHtml = '<div class="d-status placed">✓ 已排入 '+termLabel(placed)+'，无冲突</div>';
+
+    drawer.style.setProperty('--c', d.c);
+    drawer.innerHTML =
+      '<div class="drawer-head"><button class="drawer-close" id="dClose" aria-label="关闭">✕</button>'+
+        '<div class="code">'+d.code+(d.capstone?' · 毕业顶点课':'')+'</div>'+
+        '<h2>'+d.nm+'</h2><div class="cn">'+d.cn+' · '+d.cp+' 学分</div></div>'+
+      '<div class="drawer-body">'+
+        statusHtml+
+        '<div class="d-sec"><h3>简介</h3><p class="d-desc">'+d.desc+'</p></div>'+
+        '<div class="d-sec"><h3>先修要求</h3><div class="prq">'+prqHtml+'</div></div>'+
+        '<div class="d-sec"><h3>开课学期</h3><div class="offer-terms">'+offeredHtml+'</div></div>'+
+        datesHtml +
+      '</div>';
+    document.getElementById('dClose').addEventListener('click', closeDrawer);
+    drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false');
+    scrim.classList.add('open');
+  }
+  function closeDrawer(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); scrim.classList.remove('open'); }
+  scrim.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDrawer(); });
+
+  // ----- Toast -----
+  var toastEl = document.getElementById('toast'); var toastT;
+  function toast(ic, msg){
+    toastEl.querySelector('.ic').textContent = ic;
+    toastEl.querySelector('.msg').textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
+  }
+
+  // ----- Presets -----
+  document.getElementById('presetCompact').addEventListener('click', function(){
+    placements = { FAR:'t2-27', SBP:'t2-27', AA:'t4-27', ICAP:'t2-28' };
+    render(); toast('⚡','紧凑排布：T2 2027 双修 FAR+SBP · 毕业 2028年7月');
+  });
+  document.getElementById('presetSafe').addEventListener('click', function(){
+    placements = { FAR:'t1-27', SBP:'t2-27', AA:'t4-27', ICAP:'t2-28' };
+    render(); toast('🛡','稳健排布：FAR 单独 T1 2027 留补考缓冲 · 毕业 2028年7月');
+  });
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    placements = { FAR:null, SBP:null, AA:null, ICAP:null }; render(); toast('↺','已清空');
+  });
+
+  // ----- Init -----
+  render();
+})();
+</script>
