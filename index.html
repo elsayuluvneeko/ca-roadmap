@@ -58,7 +58,7 @@
   /* ---------- Top bar ---------- */
   .topbar {
     display: flex; align-items: center; justify-content: space-between; gap: 18px;
-    flex-wrap: wrap; margin-bottom: 6px;
+    flex-wrap: wrap; margin-bottom: 14px;
   }
   .brand h1 { font-family: var(--serif); font-size: clamp(1.3rem,3vw,1.7rem); margin: 0; letter-spacing: -.01em; font-weight: 700; }
   .brand p { margin: 2px 0 0; color: var(--muted); font-size: .8rem; font-family: var(--mono); }
@@ -77,13 +77,14 @@
   .grad .stat.bad b { color: var(--bad); }
   .grad .stat.ok b { color: var(--ok); }
 
-  /* ---------- Progress panel ---------- */
-  .prog { margin: 16px 0 18px; }
-  .prog-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-  .prog-head .cap { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-  .prog-head .sub { font-size: .76rem; color: var(--faint); }
-  .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+  /* ---------- Sections / progress ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 20px 0 10px; }
+  .sec-head .cap { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); font-weight: 700; }
+  .sec-head .sub { font-size: .78rem; color: var(--muted); }
+  .sec-head .spacer { flex: 1; }
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
   .pcard {
+    position: relative;
     background: var(--surface); border: 1px solid var(--hair);
     border-left: 4px solid var(--c, var(--teal)); border-radius: 11px;
     padding: 10px 12px; box-shadow: var(--shadow-1);
@@ -92,7 +93,12 @@
   .pcard .top:hover .nm { color: var(--teal); }
   .pcard .code { font-family: var(--mono); font-weight: 700; font-size: .8rem; color: var(--c, var(--teal)); }
   .pcard .nm { font-size: .82rem; font-weight: 600; transition: color .15s; }
-  .pcard .cn { font-size: .68rem; color: var(--faint); margin-left: auto; }
+  .pcard .cn { font-size: .68rem; color: var(--faint); margin-left: auto; white-space: nowrap; }
+  .pcard.draggable { cursor: grab; user-select: none; touch-action: none; }
+  .pcard.draggable:active { cursor: grabbing; }
+  .pcard.dragging-src { opacity: .32; }
+  .pcard .pbadge { font-family: var(--mono); font-size: .68rem; font-weight: 700; color: var(--teal);
+    background: var(--teal-soft); border-radius: 6px; padding: 2px 7px; margin-left: auto; white-space: nowrap; }
   .seg { display: flex; margin-top: 9px; border: 1px solid var(--hair-2); border-radius: 8px; overflow: hidden; }
   .seg button {
     flex: 1; border: none; background: var(--surface); color: var(--muted);
@@ -106,10 +112,6 @@
   .seg button.on.doing { background: var(--warn); }
   .seg button.on.done  { background: var(--ok); }
 
-  /* ---------- Toolbar ---------- */
-  .toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0 14px; }
-  .hint { color: var(--muted); font-size: .82rem; margin-right: auto; display: flex; align-items: center; gap: 7px; }
-  .hint kbd { font-family: var(--mono); font-size: .72rem; background: var(--surface-2); border: 1px solid var(--hair); border-radius: 5px; padding: 1px 6px; }
   button.btn {
     font-family: var(--sans); font-size: .82rem; font-weight: 600; cursor: pointer;
     border-radius: 9px; padding: 8px 14px; border: 1px solid var(--hair-2);
@@ -180,7 +182,7 @@
   .term-head .t { font-family: var(--mono); font-weight: 700; font-size: .84rem; letter-spacing: .02em; }
   .term-head .s { font-size: .68rem; color: var(--muted); margin-top: 1px; }
   .term-head .cnt { float: right; font-family: var(--mono); font-size: .68rem; color: var(--faint); font-weight: 700; }
-  .term-body { padding: 10px; display: flex; flex-direction: column; gap: 9px; min-height: 150px; flex: 1; }
+  .term-body { padding: 10px; display: flex; flex-direction: column; gap: 9px; min-height: 196px; flex: 1; }
   .term-body .course { width: 100%; }
   .slot { border: 1.5px dashed var(--hair-2); border-radius: 9px; min-height: 40px; flex: 1;
     display: flex; align-items: center; justify-content: center; color: var(--faint); font-size: .72rem;
@@ -194,7 +196,6 @@
   .term .reason { display: none; font-size: .68rem; text-align: center; padding: 6px; color: var(--muted); }
   body.is-dragging .term.cannot .reason { display: block; }
   body.is-dragging .term.cannot .slot { display: none; }
-  body.is-dragging .term.full-note .reason { display: block; }
 
   /* ---------- Drawer ---------- */
   .scrim { position: fixed; inset: 0; background: rgba(10,18,16,.42); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 50; }
@@ -218,8 +219,6 @@
   .d-sec { margin-bottom: 20px; }
   .d-sec > h3 { font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin: 0 0 9px; }
   .d-desc { font-size: .9rem; color: var(--ink-soft); }
-  .d-meta { display: flex; gap: 10px; flex-wrap: wrap; }
-  .d-chip { font-size: .74rem; background: var(--surface-2); border: 1px solid var(--hair); border-radius: 7px; padding: 5px 10px; font-family: var(--mono); }
   .d-seg { display: flex; border: 1px solid var(--hair-2); border-radius: 8px; overflow: hidden; margin-top: 2px; }
   .d-seg button { flex: 1; border: none; background: var(--surface); color: var(--muted); font-family: var(--sans); font-size: .8rem; font-weight: 600; padding: 8px 4px; cursor: pointer; border-right: 1px solid var(--hair); }
   .d-seg button:last-child { border-right: none; }
@@ -271,7 +270,7 @@
   <div class="topbar">
     <div class="brand">
       <h1>CA 学习规划台</h1>
-      <p>GradDipCA · 新西兰 · 拖拽排课</p>
+      <p>GradDipCA · 新西兰</p>
     </div>
     <div class="grad">
       <div>
@@ -279,33 +278,29 @@
         <div class="val pending" id="gradVal">— 设置进度并排课 —</div>
       </div>
       <div class="divider"></div>
-      <div class="stat" id="placedStat"><b>0/0</b><span class="lbl">已排</span></div>
+      <div class="stat" id="placedStat"><b>0/9</b><span class="lbl">已排</span></div>
       <div class="divider"></div>
       <div class="stat ok" id="conflictStat"><b>0</b><span class="lbl">冲突</span></div>
     </div>
   </div>
 
   <div class="prog">
-    <div class="prog-head">
-      <span class="cap">① 我的学习进度 — 核心课</span>
-      <span class="sub">设置每门课的状态 · 标为「未开始」的课会进入下方待排区 · 自动保存在本浏览器</span>
+    <div class="sec-head">
+      <span class="cap">① 学习进度 · 核心课</span>
+      <span class="sub">「未开始」的核心课会进入下方待排区</span>
     </div>
     <div class="pgrid" id="progGrid"></div>
 
-    <div class="prog-head" style="margin-top:16px">
+    <div class="sec-head">
       <span class="cap">选修课</span>
-      <span class="sub">同样可排课 · 是否需要选修取决于你的学分要求 · 未排入不影响毕业推算</span>
+      <span class="sub">可选修两门 · 直接拖到下方学期</span>
     </div>
-    <div class="pgrid" id="elecGrid"></div>
+    <div class="pgrid" id="elecGrid" data-drop="tray"></div>
   </div>
 
-  <div class="prog-head">
+  <div class="sec-head">
     <span class="cap">② 排课</span>
-    <span class="sub">把「未开始」的课拖进学期，系统实时校验开课学期、每学期上限与先修顺序 · 点卡片查看报名窗口</span>
-  </div>
-
-  <div class="toolbar">
-    <span class="hint">💡 拖动课程卡到学期列，<kbd>点击</kbd>卡片看详情与报名截止日，拖回上方托盘可取消</span>
+    <span class="spacer"></span>
     <button class="btn primary" id="presetCompact">⚡ 紧凑排布</button>
     <button class="btn" id="presetSafe">🛡 稳健排布</button>
     <button class="btn ghost" id="resetBtn">清空排课</button>
@@ -321,10 +316,8 @@
   </div>
 
   <p class="foot" id="foot">
-    先在上方「学习进度」标记你已修/在修的课，剩下「未开始」的课（含选修）会出现在待排区；拖到学期列即可排课，系统会实时校验：该学期是否开课、是否已满 2 门、先修课顺序（标注「可同期」的先修允许同学期修读）。<br>
-    点击任意课程卡可查看每个开课学期的<b>报名开放/截止日期</b>——报名截止早于开课数周，错过就要等下一次开课，务必留意。<br>
-    你的进度与排课自动保存在本浏览器（localStorage），换设备或清除浏览器数据会重置。<br>
-    数据来源：CA Program 年度时间表（T1 2026–T4 2028）与 Term 4 2026 详细时间表。日期官方标注「可能变动」，以 <code>My Capability Learn</code> 公告为准。
+    排课实时校验：开课学期 · 每学期上限 3 门 · 先修顺序（「可同期」的先修课允许同学期修读）。点击课程卡查看报名开放/截止与关键日期，进度自动保存在本浏览器。<br>
+    数据来源：CA Program 官方时间表（2026–2028）。日期可能变动，以 <code>My Capability Learn</code> 公告为准。
   </p>
 </div>
 
@@ -336,51 +329,53 @@
 (function(){
   "use strict";
 
-  // ===== Data =====
+  // ===== 数据 =====
   var CORE = ['ES','RTA','TAX','FAR','SBP','AA','ICAP'];
   var ELEC = ['DAI','ATAXNZ','AFR','ASR','BPFM','LS'];
   var ALL  = CORE.concat(ELEC);
+  var ELEC_NEED = 2;              // 选修只需两门
+  var TERM_CAP = 3;               // 每学期上限 3 门
 
   // prereq = 必须排在更早学期 (P)；coreq = 可同学期 (P or C)
   var COURSES = {
-    ES:   { code:'ES',   nm:'Ethics & Sustainability', cn:'伦理与可持续', cp:15, c:'#3f8f6a',
-            prereq:[], coreq:[], desc:'伦理、治理与可持续发展基础，是多数核心课的前置基石。每学期都开课，越早修越好。' },
-    RTA:  { code:'RTA',  nm:'Risk, Technology & AI', cn:'风险·科技·AI', cp:15, c:'#b5793a',
-            prereq:[], coreq:['ES'], desc:'风险管理、科技与数据分析在会计中的应用，是 SBP（战略）的前置之一。除 T2 外每学期开课。' },
-    TAX:  { code:'TAX',  nm:'Taxation (NZ)', cn:'税务 NZ', cp:15, c:'#c04a6f',
-            prereq:[], coreq:['ES'], desc:'（新西兰）税务法规与实务，是 ICAP 的前置之一。每年 T2、T4 开课。' },
+    ES:   { code:'ES',   nm:'Ethics & Sustainability', cn:'伦理与可持续发展', cp:15, c:'#3f8f6a',
+            prereq:[], coreq:[], desc:'伦理、职业操守与可持续发展基础，是其余课程的前置基石，每学期开课，越早修越好。' },
+    RTA:  { code:'RTA',  nm:'Risk, Technology & AI', cn:'风险、科技与人工智能', cp:15, c:'#b5793a',
+            prereq:[], coreq:['ES'], desc:'风险管理与科技、人工智能在会计中的应用，是 SBP 的先修课之一。' },
+    TAX:  { code:'TAX',  nm:'Taxation (NZ)', cn:'税务（新西兰）', cp:15, c:'#c04a6f',
+            prereq:[], coreq:['ES'], desc:'新西兰税制与实务，是 ICAP 的先修课之一，每年 T2、T4 开课。' },
     FAR:  { code:'FAR',  nm:'Financial Accounting & Reporting', cn:'财务会计与报告', cp:15, c:'#0d7c86',
-            prereq:[], coreq:['ES'], desc:'财务报表编制、会计准则应用与合并报表等核心技术，是 AA（审计）的前置科目。' },
-    SBP:  { code:'SBP',  nm:'Strategy & Business Performance', cn:'战略与业务表现', cp:15, c:'#3f7dbd',
-            prereq:['ES','RTA'], coreq:[], desc:'战略分析、绩效管理与商业决策。先修为 ES + RTA。' },
-    AA:   { code:'AA',   nm:'Audit & Analytics', cn:'审计与分析', cp:15, c:'#8a5fb0',
-            prereq:['ES','FAR'], coreq:[], desc:'审计流程、证据获取与数据分析在鉴证中的应用。需先修完 FAR，且仅在部分学期开课。' },
-    ICAP: { code:'ICAP', nm:'Integrated CA Practice', cn:'综合执业（毕业顶点课）', cp:15, c:'#a9822a', capstone:true,
-            prereq:['ES','RTA','TAX','FAR','SBP','AA'], coreq:[], desc:'整合全部核心知识的综合案例与监考大考。必须最后修，需完成其余 6 门核心课。' },
+            prereq:[], coreq:['ES'], desc:'财务报表编制、会计准则应用与合并报表，是 AA 的先修课。' },
+    SBP:  { code:'SBP',  nm:'Strategy & Business Performance', cn:'战略与业务绩效', cp:15, c:'#3f7dbd',
+            prereq:['ES','RTA'], coreq:[], desc:'战略分析、绩效管理与商业决策，先修 ES 与 RTA。' },
+    AA:   { code:'AA',   nm:'Audit & Analytics', cn:'审计与数据分析', cp:15, c:'#8a5fb0',
+            prereq:['ES','FAR'], coreq:[], desc:'审计流程、证据获取与数据分析应用，需先修完 FAR，仅部分学期开课。' },
+    ICAP: { code:'ICAP', nm:'Integrated CA Practice', cn:'综合执业', cp:15, c:'#a9822a', capstone:true,
+            prereq:['ES','RTA','TAX','FAR','SBP','AA'], coreq:[], desc:'整合全部核心知识的综合案例与监考大考，须最后修读，需完成其余 6 门核心课。' },
     // ---- 选修 ----
     DAI:    { code:'DAI',    nm:'Data Analytics & Insights', cn:'数据分析与洞察', cp:12, c:'#5f9e42', elective:true,
-              prereq:[], coreq:['ES'], desc:'数据分析工具与商业洞察方法。选修课，先修 ES（可同期）。' },
-    ATAXNZ: { code:'ATAXNZ', nm:'Advanced Tax (NZ)', cn:'高级税务 NZ', cp:12, c:'#d06a4e', elective:true,
-              prereq:['TAX'], coreq:[], desc:'新西兰高级税务议题。选修课，需先修完 TAX NZ。仅 T3 开课。' },
+              prereq:[], coreq:['ES'], desc:'数据分析工具与商业洞察方法。' },
+    ATAXNZ: { code:'ATAXNZ', nm:'Advanced Tax (NZ)', cn:'高级税务（新西兰）', cp:12, c:'#d06a4e', elective:true,
+              prereq:['TAX'], coreq:[], desc:'新西兰高级税务议题，需先修完 TAX，仅 T3 开课。' },
     AFR:    { code:'AFR',    nm:'Advanced Financial Reporting', cn:'高级财务报告', cp:12, c:'#6b7fd6', elective:true,
-              prereq:['FAR'], coreq:['ES'], desc:'复杂财务报告议题深化。选修课，需先修完 FAR。仅 T4 开课。' },
-    ASR:    { code:'ASR',    nm:'Assurance', cn:'鉴证', cp:12, c:'#9c5a8a', elective:true,
-              prereq:['AA'], coreq:[], desc:'鉴证与审计进阶。选修课，需先修完 AA。仅 T1 开课。' },
-    BPFM:   { code:'BPFM',   nm:'Business Partnering & Financial Modelling', cn:'商业伙伴与财务建模', cp:12, c:'#7a8f3d', elective:true,
-              prereq:[], coreq:['ES'], desc:'业务伙伴角色与财务建模实务。选修课，先修 ES（可同期）。' },
-    LS:     { code:'LS',     nm:'Leadership in Sustainability', cn:'可持续领导力', cp:12, c:'#4f8f8b', elective:true,
-              prereq:[], coreq:['ES'], desc:'可持续发展中的领导力。选修课，先修 ES（可同期）。' }
+              prereq:['FAR'], coreq:['ES'], desc:'复杂财务报告议题，需先修完 FAR，仅 T4 开课。' },
+    ASR:    { code:'ASR',    nm:'Assurance', cn:'鉴证业务', cp:12, c:'#9c5a8a', elective:true,
+              prereq:['AA'], coreq:[], desc:'鉴证与审计进阶，需先修完 AA，仅 T1 开课。' },
+    BPFM:   { code:'BPFM',   nm:'Business Partnering & Financial Modelling', cn:'业务伙伴与财务建模', cp:12, c:'#7a8f3d', elective:true,
+              prereq:[], coreq:['ES'], desc:'业务伙伴职能与财务建模实务。' },
+    LS:     { code:'LS',     nm:'Leadership in Sustainability', cn:'可持续发展领导力', cp:12, c:'#4f8f8b', elective:true,
+              prereq:[], coreq:['ES'], desc:'可持续发展中的领导力与变革管理。' }
   };
 
   var TERMS = [
     { id:'t4-26', t:'T4 2026', s:'2026年8–12月', o:0 },
-    { id:'t1-27', t:'T1 2027', s:'2027年1–3月', o:1 },
-    { id:'t2-27', t:'T2 2027', s:'2027年4–7月', o:2 },
-    { id:'t3-27', t:'T3 2027', s:'2027年7–10月', o:3 },
+    { id:'t1-27', t:'T1 2027', s:'2027年1–4月', o:1 },
+    { id:'t2-27', t:'T2 2027', s:'2027年3–7月', o:2 },
+    { id:'t3-27', t:'T3 2027', s:'2027年6–10月', o:3 },
     { id:'t4-27', t:'T4 2027', s:'2027年9–12月', o:4 },
-    { id:'t1-28', t:'T1 2028', s:'2028年1–3月', o:5 },
-    { id:'t2-28', t:'T2 2028', s:'2028年4–7月', o:6 },
-    { id:'t3-28', t:'T3 2028', s:'2028年7–10月', o:7 },
+    { id:'t1-28', t:'T1 2028', s:'2028年1–4月', o:5 },
+    { id:'t2-28', t:'T2 2028', s:'2028年3–7月', o:6 },
+    { id:'t3-28', t:'T3 2028', s:'2028年6–10月', o:7 },
     { id:'t4-28', t:'T4 2028', s:'2028年9–12月', o:8 }
   ];
   var TORDER = {}; TERMS.forEach(function(t){ TORDER[t.id]=t.o; });
@@ -402,7 +397,7 @@
     LS:     ['t2-27','t3-27','t1-28','t3-28']
   };
 
-  // 每学期关键日期: [开课, 结课评估(大作业/考试/工作坊), 成绩发布, (毕业时点)]
+  // 每学期关键日期: [开课, 结课评估, 成绩发布, (毕业时点)]
   var DATES = {
     ES:  { 't4-26':['31 Aug 26','12 Sep 26','25 Sep 26'], 't1-27':['11 Jan 27','24 Jan 27','5 Feb 27'],
            't2-27':['22 Mar 27','4 Apr 27','16 Apr 27'],  't3-27':['8 Jun 27','20 Jun 27','2 Jul 27'],
@@ -441,7 +436,7 @@
            't1-28':['31 Jan 28','15 Mar 28','31 Mar 28'], 't3-28':['31 Jul 28','13 Sep 28','29 Sep 28'] }
   };
 
-  // 报名窗口: [报名开放, 报名截止] —— 截止早于开课数周，错过要等下一次开课
+  // 报名窗口: [报名开放, 报名截止]
   var ENROL = {
     ES:  { 't4-26':['4 Aug 26','17 Aug 26'], 't1-27':['3 Nov 26','7 Dec 26'], 't2-27':['16 Feb 27','8 Mar 27'],
            't3-27':['11 May 27','24 May 27'], 't4-27':['10 Aug 27','23 Aug 27'], 't1-28':['2 Nov 27','6 Dec 27'],
@@ -471,10 +466,11 @@
            't3-28':['9 May 28','10 Jul 28'] }
   };
 
-  var CN = { ES:'伦理与可持续', RTA:'风险·科技·AI', TAX:'税务 NZ', FAR:'财务会计与报告', SBP:'战略与业务表现', AA:'审计与分析', ICAP:'综合执业',
-             DAI:'数据分析与洞察', ATAXNZ:'高级税务 NZ', AFR:'高级财务报告', ASR:'鉴证', BPFM:'商业伙伴与财务建模', LS:'可持续领导力' };
+  var CN = { ES:'伦理与可持续发展', RTA:'风险、科技与人工智能', TAX:'税务（新西兰）', FAR:'财务会计与报告', SBP:'战略与业务绩效',
+             AA:'审计与数据分析', ICAP:'综合执业', DAI:'数据分析与洞察', ATAXNZ:'高级税务（新西兰）', AFR:'高级财务报告',
+             ASR:'鉴证业务', BPFM:'业务伙伴与财务建模', LS:'可持续发展领导力' };
 
-  // ===== Date helpers（报名倒计时用）=====
+  // ===== 日期工具（报名倒计时）=====
   var MON = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
   function pDate(s){
     var m = /(\d+)\s+([A-Za-z]+)\s+(\d+)/.exec(s); if(!m) return null;
@@ -492,8 +488,7 @@
     return '';
   }
 
-  // ===== State（单一数据源）=====
-  // status[id] ∈ {'todo','doing','done'}；placements[id] = 学期 id | null（仅 todo 时有意义）
+  // ===== 状态（单一数据源）=====
   var status = {}, placements = {};
   ALL.forEach(function(id){ status[id]='todo'; placements[id]=null; });
 
@@ -511,28 +506,39 @@
           if (d.placements && (d.placements[id]===null || TORDER[d.placements[id]]!==undefined)) placements[id]=d.placements[id]||null;
           if (status[id]!=='todo') placements[id]=null;
         });
-        return;
+      } else {
+        // 迁移 v2
+        var raw2 = localStorage.getItem('ca-planner-v2');
+        if (raw2){
+          var d2 = JSON.parse(raw2); if(!d2) return;
+          CORE.forEach(function(id){
+            if (d2.status && (d2.status[id]==='todo'||d2.status[id]==='doing'||d2.status[id]==='done')) status[id]=d2.status[id];
+            if (d2.placements && (d2.placements[id]===null || TORDER[d2.placements[id]]!==undefined)) placements[id]=d2.placements[id]||null;
+            if (status[id]!=='todo') placements[id]=null;
+          });
+          if (d2.elec) ELEC.forEach(function(id){ if (d2.elec[id]) status[id]='done'; });
+        }
       }
-      // 迁移 v2（选修课当时是布尔勾选）
-      var raw2 = localStorage.getItem('ca-planner-v2');
-      if (raw2){
-        var d2 = JSON.parse(raw2); if(!d2) return;
-        CORE.forEach(function(id){
-          if (d2.status && (d2.status[id]==='todo'||d2.status[id]==='doing'||d2.status[id]==='done')) status[id]=d2.status[id];
-          if (d2.placements && (d2.placements[id]===null || TORDER[d2.placements[id]]!==undefined)) placements[id]=d2.placements[id]||null;
-          if (status[id]!=='todo') placements[id]=null;
-        });
-        if (d2.elec) ELEC.forEach(function(id){ if (d2.elec[id]) status[id]='done'; });
-        save();
-      }
+      // 选修名额约束：超出的取消排入
+      var cap = elecCapNow(), kept = 0;
+      ELEC.forEach(function(id){
+        if (status[id]==='todo' && placements[id]){
+          kept++; if (kept > cap) placements[id]=null;
+        }
+      });
+      save();
     } catch(e){}
   }
 
-  // ===== Derived =====
+  // ===== 派生 =====
   function isSatisfied(id){ return status[id]==='done' || status[id]==='doing'; }
   function scheduleList(){ return ALL.filter(function(id){ return status[id]==='todo'; }); }
   function placedInTerm(term, exclId){
     return ALL.filter(function(x){ return status[x]==='todo' && placements[x]===term && x!==exclId; }).length;
+  }
+  function elecCapNow(){ return Math.max(0, ELEC_NEED - ELEC.filter(isSatisfied).length); }
+  function elecPlacedCount(exclId){
+    return ELEC.filter(function(x){ return x!==exclId && status[x]==='todo' && placements[x]; }).length;
   }
 
   var boardEl = document.getElementById('board');
@@ -540,17 +546,17 @@
   var progGridEl = document.getElementById('progGrid');
   var elecGridEl = document.getElementById('elecGrid');
 
-  // ===== Build board columns once =====
+  // ===== 构建学期列 =====
   TERMS.forEach(function(t){
     var col = document.createElement('div');
     col.className = 'term'; col.dataset.term = t.id; col.dataset.drop = t.id;
     col.innerHTML =
-      '<div class="term-head"><span class="cnt">0/2</span><div class="t">'+t.t+'</div><div class="s">'+t.s+'</div></div>'+
+      '<div class="term-head"><span class="cnt">0/'+TERM_CAP+'</span><div class="t">'+t.t+'</div><div class="s">'+t.s+'</div></div>'+
       '<div class="term-body"><div class="reason"></div></div>';
     boardEl.appendChild(col);
   });
 
-  // ===== Course card factory =====
+  // ===== 课程卡工厂 =====
   function makeCard(id, placed){
     var d = COURSES[id];
     var el = document.createElement('div');
@@ -571,7 +577,7 @@
     return el;
   }
 
-  // ===== Validation =====
+  // ===== 校验 =====
   function errorsMap(){
     var errs = {};
     scheduleList().forEach(function(id){
@@ -594,13 +600,17 @@
     return errs;
   }
 
-  // ===== Render: progress panels =====
+  // ===== 进度面板 =====
   function pcardHtml(id){
     var d = COURSES[id], st = status[id];
+    var draggable = d.elective && st==='todo' && !placements[id];
+    var right;
+    if (d.elective && st==='todo' && placements[id]) right = '<span class="pbadge">已排 '+termLabel(placements[id])+'</span>';
+    else right = '<span class="cn">'+d.cp+'cp</span>';
     function b(v,label){ return '<button data-st="'+v+'" class="'+(st===v?'on '+v:'')+'">'+label+'</button>'; }
-    return '<div class="pcard" style="--c:'+d.c+'">'+
+    return '<div class="pcard'+(draggable?' draggable':'')+'" data-course="'+id+'"'+(draggable?' data-drag="1"':'')+' style="--c:'+d.c+'">'+
       '<div class="top" data-open="'+id+'"><span class="code">'+d.code+'</span>'+
-        '<span class="nm">'+d.cn+'</span><span class="cn">'+d.cp+'cp</span></div>'+
+        '<span class="nm">'+d.cn+'</span>'+right+'</div>'+
       '<div class="seg" data-seg="'+id+'">'+ b('todo','未开始')+b('doing','进行中')+b('done','已完成') +'</div>'+
     '</div>';
   }
@@ -609,25 +619,26 @@
     elecGridEl.innerHTML = ELEC.map(pcardHtml).join('');
   }
 
-  // ===== Render: everything =====
+  // ===== 总渲染 =====
   function render(popId){
     var errs = errorsMap();
     var sched = scheduleList();
 
     renderProgress();
 
-    // tray
+    // 托盘：只放核心课
     trayEl.querySelectorAll('.course, .empty').forEach(function(n){ n.remove(); });
-    var un = sched.filter(function(id){ return !placements[id]; });
-    if (sched.length === 0){
-      var e0 = document.createElement('span'); e0.className='empty'; e0.textContent='没有「未开始」的课程 — 全部已修或在修 ✓'; trayEl.appendChild(e0);
+    var coreTodo = CORE.filter(function(id){ return status[id]==='todo'; });
+    var un = coreTodo.filter(function(id){ return !placements[id]; });
+    if (coreTodo.length === 0){
+      var e0 = document.createElement('span'); e0.className='empty'; e0.textContent='没有待排的核心课 ✓'; trayEl.appendChild(e0);
     } else if (un.length === 0){
-      var e1 = document.createElement('span'); e1.className='empty'; e1.textContent='待排课程已全部排入 ✓'; trayEl.appendChild(e1);
+      var e1 = document.createElement('span'); e1.className='empty'; e1.textContent='核心课已全部排入 ✓'; trayEl.appendChild(e1);
     } else {
       un.forEach(function(id){ trayEl.appendChild(makeCard(id,false)); });
     }
 
-    // columns
+    // 学期列
     TERMS.forEach(function(t){
       var col = boardEl.querySelector('[data-term="'+t.id+'"]');
       var body = col.querySelector('.term-body');
@@ -639,26 +650,24 @@
         if (id===popId) card.classList.add('pop');
         body.appendChild(card);
       });
-      for (var k=here.length; k<2; k++){
+      for (var k=here.length; k<TERM_CAP; k++){
         var slot = document.createElement('div'); slot.className='slot'; slot.textContent='＋';
         body.appendChild(slot);
       }
-      col.querySelector('.cnt').textContent = here.length + '/2';
+      col.querySelector('.cnt').textContent = here.length + '/' + TERM_CAP;
     });
 
-    // status bar
-    var todoN = sched.length;
-    var placedN = sched.filter(function(id){ return placements[id]; }).length;
+    // 顶部统计：核心待排 + 选修名额（共 9）
+    var corePlaced = coreTodo.filter(function(id){ return placements[id]; }).length;
+    var cap = elecCapNow();
+    var elecPlaced = ELEC.filter(function(id){ return status[id]==='todo' && placements[id]; }).length;
     var conflictN = Object.keys(errs).length;
-    document.querySelector('#placedStat b').textContent = placedN + '/' + todoN;
+    document.querySelector('#placedStat b').textContent = (corePlaced + elecPlaced) + '/' + (coreTodo.length + cap);
     var cs = document.getElementById('conflictStat');
     cs.querySelector('b').textContent = conflictN;
     cs.className = 'stat ' + (conflictN? 'bad':'ok');
 
-    // graduation（只由核心课决定；选修不排不影响）
-    var coreTodo = CORE.filter(function(id){ return status[id]==='todo'; });
-    var corePlaced = coreTodo.filter(function(id){ return placements[id]; }).length;
-
+    // 毕业推算（由核心课决定）
     var gv = document.getElementById('gradVal');
     if (status.ICAP === 'done'){
       gv.className = 'val done'; gv.textContent = '🎓 已完成'; gv.title = 'ICAP 已标记为完成';
@@ -678,19 +687,17 @@
     save();
   }
 
-  // ===== Status ops =====
+  // ===== 状态操作 =====
   function setStatus(id, st){
     if (status[id]===st) return;
     status[id] = st;
     if (st !== 'todo') placements[id] = null;
     render();
   }
-
-  // ===== Placement ops =====
   function placeCourse(id, term){ placements[id] = term; render(id); }
   function unplace(id){ placements[id]=null; render(); }
 
-  // ===== Progress panel events (delegation) =====
+  // ===== 进度面板事件 =====
   document.querySelector('.prog').addEventListener('click', function(ev){
     var segBtn = ev.target.closest('.seg button');
     if (segBtn){ setStatus(segBtn.parentNode.dataset.seg, segBtn.dataset.st); return; }
@@ -698,13 +705,17 @@
     if (open){ openDrawer(open.dataset.open); return; }
   });
 
-  // ===== Drag engine (pointer based) =====
+  // ===== 拖拽引擎 =====
   var drag = null; var THRESH = 5;
 
   document.addEventListener('pointerdown', function(ev){
     if (ev.button !== undefined && ev.button !== 0) return;
     var card = ev.target.closest('.course');
-    if (!card) return;
+    if (!card){
+      var pc = ev.target.closest('.pcard[data-drag]');
+      if (!pc || ev.target.closest('.seg')) return;
+      card = pc;
+    }
     drag = { id: card.dataset.course, startX: ev.clientX, startY: ev.clientY,
              started:false, src:card, fromTerm: placements[card.dataset.course] };
     window.addEventListener('pointermove', onMove);
@@ -715,18 +726,21 @@
     drag.started = true;
     document.body.classList.add('is-dragging');
     drag.src.classList.add('dragging-src');
-    var g = drag.src.cloneNode(true);
-    g.classList.add('drag-ghost'); g.classList.remove('dragging-src','pop');
+    var g = makeCard(drag.id, false);
+    g.classList.add('drag-ghost');
     document.body.appendChild(g);
     drag.ghost = g;
+    var isElec = !!COURSES[drag.id].elective;
+    var elecFull = isElec && elecPlacedCount(drag.id) >= elecCapNow();
     TERMS.forEach(function(t){
       var col = boardEl.querySelector('[data-term="'+t.id+'"]');
-      col.classList.remove('can','cannot','full-note');
+      col.classList.remove('can','cannot');
       var offered = OFFER[drag.id].indexOf(t.id) >= 0;
       var count = placedInTerm(t.id, drag.id);
       var reasonEl = col.querySelector('.reason');
-      if (!offered){ col.classList.add('cannot'); reasonEl.textContent='本学期未开课'; }
-      else if (count>=2){ col.classList.add('cannot'); reasonEl.textContent='已满 2 门'; }
+      if (elecFull){ col.classList.add('cannot'); reasonEl.textContent='选修名额已满（共 '+ELEC_NEED+' 门）'; }
+      else if (!offered){ col.classList.add('cannot'); reasonEl.textContent='本学期未开课'; }
+      else if (count>=TERM_CAP){ col.classList.add('cannot'); reasonEl.textContent='已满 '+TERM_CAP+' 门'; }
       else { col.classList.add('can'); reasonEl.textContent=''; }
     });
     moveGhost(ev);
@@ -770,10 +784,12 @@
       if (target === 'tray'){
         if (placements[id]) unplace(id);
       } else {
+        var isElec = !!COURSES[id].elective;
         var offered = OFFER[id].indexOf(target) >= 0;
         var count = placedInTerm(target, id);
-        if (!offered){ toast('✕','该学期不开设 '+id+'（'+(CN[id]||id)+'）'); }
-        else if (count>=2){ toast('✕','该学期已排满 2 门'); }
+        if (isElec && elecPlacedCount(id) >= elecCapNow()){ toast('✕','选修名额已满（共 '+ELEC_NEED+' 门），先把已排选修拖回来'); }
+        else if (!offered){ toast('✕','该学期不开设 '+id+'（'+(CN[id]||id)+'）'); }
+        else if (count>=TERM_CAP){ toast('✕','该学期已排满 '+TERM_CAP+' 门'); }
         else {
           placeCourse(id, target);
           var e2 = errorsMap();
@@ -789,14 +805,14 @@
     if (drag && drag.ghost) drag.ghost.remove();
     if (drag && drag.src) drag.src.classList.remove('dragging-src');
     document.body.classList.remove('is-dragging');
-    document.querySelectorAll('.hoverdrop,.can,.cannot,.full-note').forEach(function(n){ n.classList.remove('hoverdrop','can','cannot','full-note'); });
+    document.querySelectorAll('.hoverdrop,.can,.cannot').forEach(function(n){ n.classList.remove('hoverdrop','can','cannot'); });
     trayEl.classList.remove('tray-target');
     drag = null;
   }
 
   function termLabel(id){ for (var i=0;i<TERMS.length;i++) if(TERMS[i].id===id) return TERMS[i].t; return id; }
 
-  // ===== Drawer =====
+  // ===== 详情抽屉 =====
   var drawer = document.getElementById('drawer');
   var scrim = document.getElementById('scrim');
 
@@ -824,7 +840,6 @@
       ? d.prereq.map(function(p){ return prqRow(p,false); }).join('') + d.coreq.map(function(p){ return prqRow(p,true); }).join('')
       : '<div style="color:var(--faint);font-size:.84rem">无先修要求</div>';
 
-    // 报名窗口表：每个开课学期的报名开放/截止
     var enrolRows = OFFER[id].map(function(t){
       var e = ENROL[id] && ENROL[id][t];
       var open = e ? e[0] : '—', close = e ? e[1] : '—';
@@ -848,7 +863,7 @@
     var statusHtml;
     if (st==='done') statusHtml = '<div class="d-status placed">✓ 已完成</div>';
     else if (st==='doing') statusHtml = '<div class="d-status doing">◐ 进行中</div>';
-    else if (!placed) statusHtml = '<div class="d-status un">未开始 · 尚未排入 — 从托盘拖到某个学期</div>';
+    else if (!placed) statusHtml = '<div class="d-status un">未开始 · 尚未排入学期</div>';
     else if (errs[id]) statusHtml = '<div class="d-status err">⚠ '+errs[id]+'</div>';
     else statusHtml = '<div class="d-status placed">✓ 已排入 '+termLabel(placed)+'，无冲突</div>';
 
@@ -890,7 +905,7 @@
     clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
   }
 
-  // ===== Presets（只作用于仍为「未开始」的核心课）=====
+  // ===== 预设（只作用于「未开始」的核心课）=====
   function applyPreset(map, ic, msg){
     scheduleList().forEach(function(id){ if (map[id]) placements[id]=map[id]; });
     render(); toast(ic, msg);
@@ -899,10 +914,10 @@
     applyPreset({ FAR:'t2-27', SBP:'t2-27', AA:'t4-27', ICAP:'t2-28' }, '⚡', '紧凑排布：仅对「未开始」的核心课生效');
   });
   document.getElementById('presetSafe').addEventListener('click', function(){
-    applyPreset({ FAR:'t1-27', SBP:'t2-27', AA:'t4-27', ICAP:'t2-28' }, '🛡', '稳健排布：FAR 单独 T1 留补考缓冲（仅对「未开始」的核心课生效）');
+    applyPreset({ FAR:'t1-27', SBP:'t2-27', AA:'t4-27', ICAP:'t2-28' }, '🛡', '稳健排布：FAR 单独 T1 留补考缓冲');
   });
   document.getElementById('resetBtn').addEventListener('click', function(){
-    ALL.forEach(function(id){ placements[id]=null; }); render(); toast('↺','已清空排课（进度状态保留）');
+    ALL.forEach(function(id){ placements[id]=null; }); render(); toast('↺','已清空排课（进度保留）');
   });
   document.getElementById('resetAll').addEventListener('click', function(){
     ALL.forEach(function(id){ status[id]='todo'; placements[id]=null; });
@@ -910,7 +925,7 @@
     render(); toast('↺','已重置全部进度与排课');
   });
 
-  // ===== Init =====
+  // ===== 启动 =====
   load();
   render();
 })();
