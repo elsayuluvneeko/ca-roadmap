@@ -301,8 +301,6 @@
   <div class="sec-head">
     <span class="cap">② 排课</span>
     <span class="spacer"></span>
-    <button class="btn primary" id="presetCompact">⚡ 紧凑排布</button>
-    <button class="btn" id="presetSafe">🛡 稳健排布</button>
     <button class="btn ghost" id="resetBtn">清空排课</button>
     <button class="btn ghost" id="resetAll">↺ 重置全部</button>
   </div>
@@ -905,17 +903,6 @@
     clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
   }
 
-  // ===== 预设（只作用于「未开始」的核心课）=====
-  function applyPreset(map, ic, msg){
-    scheduleList().forEach(function(id){ if (map[id]) placements[id]=map[id]; });
-    render(); toast(ic, msg);
-  }
-  document.getElementById('presetCompact').addEventListener('click', function(){
-    applyPreset({ FAR:'t2-27', SBP:'t2-27', AA:'t4-27', ICAP:'t2-28' }, '⚡', '紧凑排布：仅对「未开始」的核心课生效');
-  });
-  document.getElementById('presetSafe').addEventListener('click', function(){
-    applyPreset({ FAR:'t1-27', SBP:'t2-27', AA:'t4-27', ICAP:'t2-28' }, '🛡', '稳健排布：FAR 单独 T1 留补考缓冲');
-  });
   document.getElementById('resetBtn').addEventListener('click', function(){
     ALL.forEach(function(id){ placements[id]=null; }); render(); toast('↺','已清空排课（进度保留）');
   });
